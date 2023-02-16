@@ -2,7 +2,6 @@ pipeline {
     agent any
 
     stages {
-// check stage probehnou vsechny branche
         stage('check') {
             steps {
                 echo 'Check Stage running'
@@ -11,26 +10,31 @@ pipeline {
             }
         }
 
-
-// tuhle stage probehnou jen develop a master
-// todo rozdelit jeste develop a master, podle ceho ale
         stage('release') {
           when {
             expression {
             	env.BRANCH_NAME == 'develop' || env.BRANCH_NAME == 'master'
             }
           }
-          steps {
           // steps pro develop
-            when { TAG_NAME == 'latest' }
+          steps {
+              when {
+                  expression {
+                      TAG_NAME == 'latest'
+                  }
+              }
                   steps {
                       echo "Deploying ${ env.BRANCH_NAME }"
                   }
 
           // steps pro release
-            when { TAG_NAME == 'production' }
+              when {
+                  expression {
+                      TAG_NAME == 'production'
+                  }
+              }
                   steps {
-                      echo "Deploying ${ env.BRANCH_NAME}"
+                      echo "Deploying ${ env.BRANCH_NAME }"
                   }
       }
     }
