@@ -13,16 +13,15 @@ pipeline {
 
 
 // tuhle stage probehnou jen develop a master
-// todo rozdelit jeste develop a master
+// todo rozdelit jeste develop a master, podle ceho ale
         stage('release') {
-          when { 
+          when {
             expression {
-            	env.BRANCH_NAME == 'develop' || env.BRANCH_NAME == 'master' 
+            	env.BRANCH_NAME == 'develop' || env.BRANCH_NAME == 'master'
             }
           }
             steps {
-                echo 'Release stage running'
-                echo 'Deploying master or develop'
+                echo "Deploying ${ env.BRANCH_NAME }"
             }
         }
     }
