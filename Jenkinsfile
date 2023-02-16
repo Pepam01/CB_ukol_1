@@ -15,7 +15,7 @@ pipeline {
 // tuhle stage probehnou jen develop a master
 // todo rozdelit jeste develop a master
         stage('release') {
-          when { branch 'develop' || branch 'master' }
+          when { expression { branch 'develop' || branch 'master' } }
             steps {
                 echo 'Release stage running'
                 echo 'Deploying master or develop'
