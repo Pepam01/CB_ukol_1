@@ -20,17 +20,19 @@ pipeline {
             	env.BRANCH_NAME == 'develop' || env.BRANCH_NAME == 'master'
             }
           }
-            steps {
-                echo "Deploying ${ env.BRANCH_NAME }"
-            }
-        }
+          steps {
+          // steps pro develop
+            when { TAG_NAME == 'latest' }
+                  steps {
+                      echo "Deploying ${ env.BRANCH_NAME }"
+                  }
+
+          // steps pro release
+            when { TAG_NAME == 'production' }
+                  steps {
+                      echo "Deploying ${ env.BRANCH_NAME}"
+                  }
+      }
     }
+  }
 }
-
-
-// takhle pres env promenne, ja to ale delam pres property? Nevim jak se tomu rika
-//if (env.BRANCH_NAME == "deployment") {
-//    ... do some build ...
-//} else {
-//    ... do something else ...
-//}
