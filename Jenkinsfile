@@ -2,20 +2,32 @@ pipeline {
     agent any
 
     stages {
-        stage('Build') {
+// check stage probehnou vsechny branche
+        stage('check') {
             steps {
-                echo 'Building..'
+                echo 'Check Stage running'
+                echo 'Building'
+                echo 'Testing'
             }
         }
-        stage('Test') {
+
+
+// tuhle stage probehnou jen develop a master
+// todo rozdelit jeste develop a master
+        stage('release') {
+          when { branch 'develop' || branch 'master' }
             steps {
-                echo 'Testing..'
-            }
-        }
-        stage('Deploy') {
-            steps {
-                echo 'Deploying....'
+                echo 'Release stage running'
+                echo 'Deploying master or develop'
             }
         }
     }
 }
+
+
+// takhle pres env promenne, ja to ale delam pres property? Nevim jak se tomu rika
+//if (env.BRANCH_NAME == "deployment") {
+//    ... do some build ...
+//} else {
+//    ... do something else ...
+//}
