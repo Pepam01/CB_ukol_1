@@ -6,6 +6,7 @@ pipeline {
     stages {
         stage('check') {
             steps {
+                sh '~/CODING_BEAR/Pipeline_ukol_1/pipeline_ukol_1/scripts/build.sh'
                 echo 'Check Stage of branch ${ env.BRANCH_NAME } running...'
             }
         }
@@ -25,7 +26,7 @@ pipeline {
               }
                   steps {
                       echo "Setting RELEASE_VERSION tag to latest"
-                      RELEASE_VERSION = 'latest'
+                      env.RELEASE_VERSION = 'latest'
                   }
 
           // steps pro master branch
@@ -36,7 +37,7 @@ pipeline {
               }
                   steps {
                       echo "Setting RELEASE_VERSION tag to production"
-                      RELEASE_VERSION = 'production'
+                      env.RELEASE_VERSION = 'production'
                   }
       }
     }
