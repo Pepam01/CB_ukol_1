@@ -1,12 +1,12 @@
 pipeline {
     agent any
-
+    environment {
+        RELEASE_VERSION = 'none'       // definuju jako lokalni promennou, je jmeno tagu v CB Jenkins RELEASE_VERSION?
+    }
     stages {
         stage('check') {
             steps {
-                echo 'Check Stage running'
-                echo 'Building'
-                echo 'Testing'
+                echo 'Check Stage of branch ${ env.BRANCH_NAME } running...'
             }
         }
 
@@ -16,25 +16,27 @@ pipeline {
             	env.BRANCH_NAME == 'develop' || env.BRANCH_NAME == 'master'
             }
           }
-          // steps pro develop
+          // steps pro develop branch
           steps {
               when {
                   expression {
-                      TAG_NAME == 'latest'
+                      env.BRANCH_NAME == 'develop'
                   }
               }
                   steps {
-                      echo "Deploying ${ env.BRANCH_NAME }"
+                      echo "Setting RELEASE_VERSION tag to latest"
+                      RELEASE_VERSION = 'latest'
                   }
 
-          // steps pro release
+          // steps pro master branch
               when {
                   expression {
-                      TAG_NAME == 'production'
+                      env.BRANCH_NAME == 'master'
                   }
               }
                   steps {
-                      echo "Deploying ${ env.BRANCH_NAME }"
+                      echo "Setting RELEASE_VERSION tag to production"
+                      RELEASE_VERSION = 'production'
                   }
       }
     }
