@@ -26,7 +26,7 @@ pipeline {
               }
                   steps {
                       echo "Setting RELEASE_VERSION tag to latest"
-                      env.RELEASE_VERSION = 'latest'
+                      //env.RELEASE_VERSION = 'latest'
                   }
 
           // steps pro master branch
@@ -37,7 +37,7 @@ pipeline {
               }
                   steps {
                       echo "Setting RELEASE_VERSION tag to production"
-                      env.RELEASE_VERSION = 'production'
+                      //env.RELEASE_VERSION = 'production'
                   }
       }
     }
