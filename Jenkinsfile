@@ -6,7 +6,7 @@ pipeline {
     stages {
         stage('check') {
             steps {
-                sh '~/CODING_BEAR/Pipeline_ukol_1/pipeline_ukol_1/scripts/build.sh'
+                //sh '~/CODING_BEAR/Pipeline_ukol_1/pipeline_ukol_1/scripts/build.sh'
                 echo 'Check Stage of branch ${ env.BRANCH_NAME } running...'
             }
         }
