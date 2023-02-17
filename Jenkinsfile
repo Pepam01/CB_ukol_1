@@ -1,8 +1,8 @@
 pipeline {
     agent any
-    environment {
-        RELEASE_VERSION = 'none'       // definuju jako lokalni promennou, je jmeno tagu v CB Jenkins RELEASE_VERSION?
-    }
+    //environment {
+    //    RELEASE_VERSION = 'none'       // definuju jako lokalni promennou, je jmeno tagu v CB Jenkins RELEASE_VERSION?
+    //}
     stages {
         stage('check') {
             steps {
