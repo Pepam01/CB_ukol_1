@@ -23,8 +23,6 @@ pipeline {
       // steps pro develop branch
       steps {
 	echo "ENV_tag value :  ${ENVIRONMENT_TAG}"
-	sh "chmod +x -R ${env.WORKSPACE}"
-        sh './scripts/push_Docker_img.sh'
       }
     }
   }
