@@ -1,30 +1,46 @@
 pipeline {
   agent any
+  environment {
+    RELEASE_VERSION = 'none' // definuju jako lokalni promennou, je jmeno tagu v CB Jenkins RELEASE_VERSION?
+  }
   stages {
-    stage('Unit Test') {
+    stage('check') {
       steps {
-        sh 'mvn clean test'
+        sh './scripts/build.sh' // Gradle build?
+        sh './scripts/test.sh'
+        echo "Check Stage of branch ${env.BRANCH_NAME} running..."
       }
     }
-    stage('Deploy Standalone') {
+
+    stage('release') {
+      when {
+        expression {
+          env.BRANCH_NAME == 'develop' || env.BRANCH_NAME == 'master'
+        }
+      }
+      // steps pro develop branch
       steps {
-        sh 'mvn deploy -P standalone'
-      }
-    }
-    stage('Deploy AnyPoint') {
-      environment {
-        ANYPOINT_CREDENTIALS = credentials('anypoint.credentials')
-      }
-      steps {
-        sh 'mvn deploy -P arm -Darm.target.name=local-4.0.0-ee -Danypoint.username=${ANYPOINT_CREDENTIALS_USR}  -Danypoint.password=${ANYPOINT_CREDENTIALS_PSW}'
-      }
-    }
-    stage('Deploy CloudHub') {
-      environment {
-        ANYPOINT_CREDENTIALS = credentials('anypoint.credentials')
-      }
-      steps {
-        sh 'mvn deploy -P cloudhub -Dmule.version=4.0.0 -Danypoint.username=${ANYPOINT_CREDENTIALS_USR} -Danypoint.password=${ANYPOINT_CREDENTIALS_PSW}'
+        when {
+          expression {
+            env.BRANCH_NAME == 'develop'
+          }
+        }
+        steps {
+          echo "Setting RELEASE_VERSION tag to latest"
+          env.RELEASE_VERSION = 'latest'
+        }
+
+        // steps pro master branch
+        when {
+          expression {
+            env.BRANCH_NAME == 'master'
+          }
+        }
+        steps {
+          echo "Setting RELEASE_VERSION tag to production"
+          env.RELEASE_VERSION = 'production'
+        }
+        sh './scripts/push_Docker_img.sh'
       }
     }
   }
