@@ -31,7 +31,7 @@ pipeline {
 def getEnvName(branchName) {
     if("master".equals(branchName)) {
         return "production";
-    } else if("production".equals(branchName)) {
+    } else if("develop".equals(branchName)) {
         return "latest";
     }
 }
