@@ -3,6 +3,7 @@ pipeline {
   stages {
     stage('check') {
       steps {
+      	sh "chmod +x -R ${env.WORKSPACE}"
         sh './scripts/build.sh' // Gradle build?
         sh './scripts/test.sh'
         echo "Check Stage of branch ${env.BRANCH_NAME} running..."
@@ -12,7 +13,7 @@ pipeline {
     stage('release') {
     environment {
     	RELEASE_VERSION = 'none'
-    	ENVIRONMENT_TAG = getEnvTag(env.BRANCH_NAME)
+    	ENVIRONMENT_TAG = getEnvName(env.BRANCH_NAME)
     }
       when {
         expression {
