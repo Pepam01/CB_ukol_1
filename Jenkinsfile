@@ -1,8 +1,5 @@
 pipeline {
   agent any
-  environment {
-    RELEASE_VERSION = 'none' // definuju jako lokalni promennou, je jmeno tagu v CB Jenkins RELEASE_VERSION?
-  }
   stages {
     stage('check') {
       steps {
@@ -13,6 +10,10 @@ pipeline {
     }
 
     stage('release') {
+    environment {
+    	RELEASE_VERSION = 'none'
+    	ENVIRONMENT_TAG = getEnvTag(env.BRANCH_NAME)
+    }
       when {
         expression {
           env.BRANCH_NAME == 'develop' || env.BRANCH_NAME == 'master'
@@ -20,28 +21,17 @@ pipeline {
       }
       // steps pro develop branch
       steps {
-        when {
-          expression {
-            env.BRANCH_NAME == 'develop'
-          }
-        }
-        steps {
-          echo "Setting RELEASE_VERSION tag to latest"
-          env.RELEASE_VERSION = 'latest'
-        }
-
-        // steps pro master branch
-        when {
-          expression {
-            env.BRANCH_NAME == 'master'
-          }
-        }
-        steps {
-          echo "Setting RELEASE_VERSION tag to production"
-          env.RELEASE_VERSION = 'production'
-        }
+	echo "ENV_tag value :  ${ENVIRONMENT_TAG}"
         sh './scripts/push_Docker_img.sh'
       }
     }
   }
+}
+
+def getEnvName(branchName) {
+    if("master".equals(branchName)) {
+        return "production";
+    } else if("production".equals(branchName)) {
+        return "latest";
+    }
 }
